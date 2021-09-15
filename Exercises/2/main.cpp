@@ -86,11 +86,6 @@ protected:
       TreeNode(T const& e, Link i = nullptr, Link d = nullptr,
                int alt = 1, int t = 1) : elem(e), iz(i), dr(d), altura(alt), tam_i(t) {}
    };
-
-   struct tKesimo {
-      int n;
-      int acumulatedTam_i;
-   };
    
    // puntero a la raíz de la estructura jerárquica de nodos
    Link raiz;
