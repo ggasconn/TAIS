@@ -6,32 +6,47 @@ TEMP_FOLDER='temp'
 EXERCISE_PATH='Exercises'
 EXERCISE_NAME=''
 
+
 function cleanEnviroment {
 	printf ">>> Cleaning files... "
 	rm -rf $TEMP_FOLDER 
 	rm $OUTPUT_NAME
-	printf " OK\n"
+	if [[ $? -eq 0 ]]; then printf " OK\n"; fi
 }
 
+## GET .ZIP FILE FROM SOURCE
 printf ">>> Downloading updated resource files..."
-curl -o $OUTPUT_NAME $URL &>/dev/null
+status=`curl -s -o $OUTPUT_NAME -I -w "%{http_code}" $URL`
 
-if [[ $? -ne 0 ]]; then
-	printf "Cannot download source files from $URL! Exiting..."
-	exit -1
-fi
+#if [[ $status -ne 200 ]]; then
+#	printf " Cannot download source files from $URL!\n"
+#	cleanEnviroment
+#	exit -1
+#fi
 
-printf " OK\n"
 
-
+## UNZIP IT
 printf ">>> Unziping template files into temporal folder..."
-unzip $OUTPUT_NAME -d $TEMP_FOLDER > /dev/null
-printf " OK\n"
+unzip $OUTPUT_NAME -d $TEMP_FOLDER &> /dev/null
+
+#if [[ $? -ne 0 ]]; then
+#	printf " FAILED!\n"
+#	cleanEnviroment
+#	exit -1
+#else
+#	printf " OK\n"
+#fi
 
 
 read -p "Enter a name for the exercise folder: " EXERCISE_NAME
 if [ -d $EXERCISE_PATH/$EXERCISE_NAME ]; then
 	printf "CAUTION! Folder $EXERCISE_PATH/$EXERCISE_NAME already exists!\n"
+	read -p "Do you really want to overwrite $EXERCISE_PATH/$EXERCISE_NAME? (y/n): " op
+
+	if [[ $op -eq 'n' ]]; then
+		cleanEnviroment
+		exit -1
+	fi
 fi
 
 cleanEnviroment
