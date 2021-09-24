@@ -79,10 +79,8 @@ bool resuelveCaso() {
             std::cout << myQueue.top() << " ";
             myQueue.pop();
          }
-      }else {
+      }else
          myQueue.push(t);
-      }
-         
    }
 
    std::cout << "\n";
