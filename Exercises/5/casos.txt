@@ -1,0 +1,18 @@
+9
+I Alberto 4000
+I Pepe 3000
+A
+I Rosa 2000
+I Laura 5000
+A
+I Sara 3000
+A
+A
+
+4
+I Paco 1000000
+I Pedro 2000
+A
+A
+
+0
