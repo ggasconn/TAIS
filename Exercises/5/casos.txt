@@ -1,3 +1,31 @@
+14
+I Alberto 40
+I Laura 40
+I Pedro 42
+I Luis 38
+I Carmen 38
+I Susana 40
+I Miriam 35
+A
+A
+A
+A
+A
+A
+A
+
+10
+I Alberto 40
+I Laura 40
+A
+I Pedro 42
+I Luis 38
+A
+I Carmen 38
+I Susana 40
+A
+I Miriam 35
+
 9
 I Alberto 4000
 I Pepe 3000
@@ -14,5 +42,7 @@ I Paco 1000000
 I Pedro 2000
 A
 A
+
+
 
 0

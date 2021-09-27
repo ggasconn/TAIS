@@ -25,10 +25,12 @@ using namespace std;
 struct patient {
    string name;
    int priority;
+   int arrivalTime;
 };
 
 bool operator<(patient const& p1, patient const& p2) {
-   return p1.priority < p2.priority;
+   return p1.priority < p2.priority || 
+         (p1.priority == p2.priority && p1.arrivalTime > p2.arrivalTime);
 }
 
 bool resuelveCaso() {
@@ -47,13 +49,12 @@ bool resuelveCaso() {
       if (c == 'I') {
          patient newPatient;
          std::cin >> newPatient.name >> newPatient.priority;
+         newPatient.arrivalTime = i;
 
          patientQueue.push(newPatient);
       }else if (c == 'A') {
-         if (!patientQueue.empty()) {
-            std::cout << patientQueue.top().name << "\n";
-            patientQueue.pop();
-         }
+         std::cout << patientQueue.top().name << "\n";
+         patientQueue.pop();
       }
    }
 
