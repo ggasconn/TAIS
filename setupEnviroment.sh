@@ -18,24 +18,25 @@ function cleanEnviroment {
 printf ">>> Downloading updated resource files..."
 status=`curl -s -o $OUTPUT_NAME -I -w "%{http_code}" $URL`
 
-#if [[ $status -ne 200 ]]; then
-#	printf " Cannot download source files from $URL!\n"
-#	cleanEnviroment
-#	exit -1
-#fi
+if [[ $status -ne 200 ]]; then
+	printf " Cannot download source files from $URL!\n"
+	cleanEnviroment
+	exit -1
+fi
 
 
 ## UNZIP IT
 printf ">>> Unziping template files into temporal folder..."
-unzip $OUTPUT_NAME -d $TEMP_FOLDER &> /dev/null
+unzip $OUTPUT_NAME -d $TEMP_FOLDER
+#unzip $OUTPUT_NAME -d $TEMP_FOLDER &> /dev/null
 
-#if [[ $? -ne 0 ]]; then
-#	printf " FAILED!\n"
-#	cleanEnviroment
-#	exit -1
-#else
-#	printf " OK\n"
-#fi
+if [[ $? -ne 0 ]]; then
+	printf " FAILED!\n"
+	cleanEnviroment
+	exit -1
+else
+	printf " OK\n"
+fi
 
 
 read -p "Enter a name for the exercise folder: " EXERCISE_NAME
@@ -48,5 +49,10 @@ if [ -d $EXERCISE_PATH/$EXERCISE_NAME ]; then
 		exit -1
 	fi
 fi
+
+printf ">>> Creating $EXERCISE_PATH/$EXERCISE_NAME and copying files..."
+mkdir $EXERCISE_PATH/$EXERCISE_NAME
+mv $TEMP_FOLDER/* $EXERCISE_PATH/$EXERCISE_NAME
+printf " OK\n"
 
 cleanEnviroment
