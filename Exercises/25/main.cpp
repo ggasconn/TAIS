@@ -22,9 +22,6 @@ using namespace std;
 #include "PriorityQueue.h"
 #include "ConjuntosDisjuntos.h"
 
-// ================================================================
-// Escribe el código completo de tu solución aquí debajo
-// ================================================================
 //@ <answer>
 
 template <typename Valor>
@@ -58,8 +55,8 @@ class ARM_Kruskal {
         }
       }
 
-      _nAeropuertos += _nArboles - _nAeropuertos;
       _coste += (_nArboles - _nAeropuertos) * costeAeropuerto;
+      _nAeropuertos += _nArboles - _nAeropuertos;
     }
 
     int coste() const { return _coste; }
