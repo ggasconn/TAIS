@@ -33,7 +33,7 @@ class Dijkstra {
     IndexPQ<T> pq;
     
   public:
-    Dijkstra(DigrafoValorado<int> const& g, std::vector<int> const& t) : distance(g.V(), INF), pq(g.V()) {
+    Dijkstra(DigrafoValorado<int> const& g) : distance(g.V(), INF), pq(g.V()) {
       distance[0] = 0;
       pq.push(0, 0);
 
@@ -81,7 +81,7 @@ bool resuelveCaso() {
     grafo.ponArista({ v - 1, w - 1, k });
   }
 
-  Dijkstra<int> dijkstra(grafo, loadingTime);
+  Dijkstra<int> dijkstra(grafo);
 
   if (dijkstra.hayCamino(n))
     cout << dijkstra.distanceTo(n) << "\n";
