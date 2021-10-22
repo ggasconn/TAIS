@@ -29,11 +29,10 @@ class ARM_Kruskal {
   private:
     std::vector<Arista<int> > arm;
     int _coste;
-    int _nArboles;
     int _nAeropuertos;
   
   public:
-    ARM_Kruskal(GrafoValorado<Valor> const& g, int costeAeropuerto) : _coste(0), _nArboles(g.V()), _nAeropuertos(0) {
+    ARM_Kruskal(GrafoValorado<Valor> const& g, int costeAeropuerto) : _coste(0), _nAeropuertos(g.V()) {
       PriorityQueue<Arista<Valor>> pq(g.aristas());
       ConjuntosDisjuntos cjtos(g.V());
     
@@ -41,26 +40,20 @@ class ARM_Kruskal {
         auto a = pq.top(); pq.pop();
         int v = a.uno(), w = a.otro(v);
         
-        if (a.valor() >= costeAeropuerto) {
-          _nAeropuertos += 2;
-          _coste += costeAeropuerto * 2;
-          arm.push_back(a);
-          if (arm.size() == g.V() - 1) break;
-        }else if (!cjtos.unidos(v,w)) {
+        if (!cjtos.unidos(v,w)) {
           cjtos.unir(v, w);
           arm.push_back(a);
           _coste += a.valor();
-          _nArboles = cjtos.num_cjtos();
+          _nAeropuertos--;
           if (arm.size() == g.V() - 1) break;
         }
       }
 
-      _coste += (_nArboles - _nAeropuertos) * costeAeropuerto;
-      _nAeropuertos += _nArboles - _nAeropuertos;
+      _coste += _nAeropuertos * costeAeropuerto;
     }
 
     int coste() const { return _coste; }
-    int nArboles() const { return _nArboles; }
+    int nAeropuertos() const { return _nAeropuertos; }
 };
 
 
@@ -73,12 +66,13 @@ bool resuelveCaso() {
 
   for (int i = 0; i < m; i++) {
       int v, w, k; std::cin >> v >> w >> k;
-      grafo.ponArista({v - 1, w - 1, k});
+      if (k < a) // Solo se pone la arista si es mejor un camino que un aeropuerto
+        grafo.ponArista({ v - 1, w - 1, k });
   }
 
   ARM_Kruskal<int> arm(grafo, a);
 
-  std::cout << arm.coste() << " " << arm.nArboles() << "\n";
+  std::cout << arm.coste() << " " << arm.nAeropuertos() << "\n";
 
   return true;
 }
