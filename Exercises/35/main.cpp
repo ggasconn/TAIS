@@ -17,11 +17,11 @@ using namespace std;
 struct building {
   int start;
   int end;
-};
 
-bool operator<(building const& a, building const& b) {
-  return a.end < b.end;
-}
+  bool operator<(building const& other) const {
+    return this->end < other.end;
+  }
+};
 
 int minimizeTunnels(std::vector<building> const& buildings) {
   int tunnels = 0;
@@ -42,12 +42,10 @@ bool resuelveCaso() {
   if (n == 0) return false;
 
   std::vector<building> buildings(n);
-  for (auto &b : buildings) {
-    int w, e; std::cin >> w >> e;
-    b = { w, e };
-  }
+  for (auto &b : buildings)
+    std::cin >> b.start >> b.end;
 
-  std::sort(buildings.begin(), buildings.end(), std::less<building>());
+  std::sort(buildings.begin(), buildings.end());
 
   cout << minimizeTunnels(buildings) << "\n";
 
