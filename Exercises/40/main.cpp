@@ -15,39 +15,75 @@
 #include <algorithm>
 #include <queue>
 
+#include "EnterosInf.h"
 #include "Matriz.h"
 
 using namespace std;
 
+/*
+Casos Base:
+  maxPuntuacion(i, 0) = 0, no hay puntos que sumar
+  maxPuntuacion(0, j) = inf, no quedan sectores
 
-int maxPuntuacion(std::vector<int> const& sectores, int i, int j, Matriz<int> puntuaciones) {
+Casos Recursivos:
+  maxPuntuacion(i, j) = maxPuntuacion(i - 1, j) si s[i] > j
+  maxPuntuacion(i, j) = max(maxPuntuacion(i, j - s[i]) + 1,
+                            maxPuntuacion(i - 1, j))
+*/
 
-  if (puntuaciones[i][j] != -1)
-    return puntuaciones[i][j];
-  
-  if (i == 0 || j == 0)
-    return 0;
-  else if (sectores[i - 1] > j)
-    puntuaciones[i][j] = maxPuntuacion(sectores, i - 1, j, puntuaciones);
-  else
-    puntuaciones[i][j] = max(maxPuntuacion(sectores, i - 1, j, puntuaciones),
-                             maxPuntuacion(sectores, i - 1, j - sectores[i - 1], puntuaciones) + sectores[i - 1]);
-  
-  return puntuaciones[i][j];
+void maxPuntuacion(std::vector<int> const& sectores, int S, int V, Matriz<EntInf>& puntuaciones) {
+  puntuaciones[0][0] = 0;
+
+  for (int i = 1; i <= S; i++) {
+    puntuaciones[i][0] = 0;
+
+    for (int j = 1; j <= V; j++) {
+      if (sectores[i - 1] > j)
+        puntuaciones[i][j] = puntuaciones[i - 1][j];
+      else
+        puntuaciones[i][j] = min(puntuaciones[i - 1][j], puntuaciones[i][j - sectores[i - 1]] + 1);
+    }
+  }
 }
 
 bool resuelveCaso() {
-  int v, s; std::cin >> v >> s;
+  int V, S; std::cin >> V >> S;
 
   if (!std::cin) return false;
 
-  std::vector<int> sectores(s);
+  std::vector<int> sectores(S);
   for (int &i : sectores)
     std::cin >> i;
   
-  Matriz<int> puntuaciones(v + 1, s + 1, -1);
+  Matriz<EntInf> puntuaciones(S + 1, V + 1, Infinito);
 
-  maxPuntuacion(sectores, v, s, puntuaciones);
+  maxPuntuacion(sectores, S, V, puntuaciones);
+
+  if (puntuaciones[S][V] == Infinito)
+    cout << "Imposible";
+  else {
+    std::vector<int> dardos(S, 0);
+    
+    int i = S, j = V;
+    while (j > 0) {
+
+      if (sectores[i - 1] > j)
+        i--;
+      else if (puntuaciones[i][j - sectores[i - 1]] < puntuaciones[i][j]) {
+        dardos[i - 1]++;
+        j -= sectores[i - 1];
+      }else
+        i--;
+    }
+
+    cout << puntuaciones[S][V] << ": ";
+    for (int i = dardos.size() - 1; i >= 0; i--) {
+      for (int j = 0; j < dardos[i]; j++)
+        cout << sectores[i] << " ";
+    }
+  }
+
+  cout << "\n";
 
   return true;
 }
