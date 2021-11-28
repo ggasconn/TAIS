@@ -66,7 +66,6 @@ bool resuelveCaso() {
     
     int i = S, j = V;
     while (j > 0) {
-
       if (sectores[i - 1] > j)
         i--;
       else if (puntuaciones[i][j - sectores[i - 1]] < puntuaciones[i][j]) {
