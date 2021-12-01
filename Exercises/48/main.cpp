@@ -20,6 +20,8 @@
 
 using namespace std;
 
+//@ <answer>
+
 /*
 Dos secuencias X e Y, dos índices i y j.
 
@@ -46,48 +48,38 @@ Llamada inicial:
 Coste en espacio y tiempo: O(X.length() * Y.length())
 */
 
-/*int buscarSubsecuencia(string const& X, string const& Y, int i, int j, Matriz<int>& secuencias) {
+int buscarSubsecuencia(string const& X, string const& Y, int i, int j, Matriz<int>& secuencias) {
   if (secuencias[i][j] != -1) return secuencias[i][j];
   
-  if (i == 0 || j == 0) secuencias[i][j] = (X[i] == Y[j]) ? 1 : 0;
-  else if (X[i] == Y[j]) secuencias[i][j] = buscarSubsecuencia(X, Y, i - 1, j - 1, secuencias) + 1;
+  if (i == 0 || j == 0) 
+    secuencias[i][j] = 0;
+  else if (X[i - 1] == Y[j - 1]) 
+    secuencias[i][j] = buscarSubsecuencia(X, Y, i - 1, j - 1, secuencias) + 1;
   else secuencias[i][j] = max(buscarSubsecuencia(X, Y, i - 1, j, secuencias),
                               buscarSubsecuencia(X, Y, i, j - 1, secuencias));
   
   return secuencias[i][j];
-}*/
-
-void buscarSubsecuencia(string const& X, string const& Y, int i, int j, Matriz<int>& secuencias) {
-  for (int i = 1; i <= X.length(); i++) {
-    for (int j = 1; j <= Y.length(); j++) {
-      if (X[i - 1] == Y[j - 1]) 
-        secuencias[i][j] = secuencias[i - 1][j - 1] + 1;
-      else 
-        secuencias[i][j] = max(secuencias[i - 1][j], secuencias[i][ j - 1]);
-    }
-  }
 }
 
 string reconstruir(string const& X, string const& Y, Matriz<int> const& secuencias) {
-  int size = secuencias[X.length() - 1][Y.length() - 1];
-  int i = 1, j = 1;
-  string subCadena = "";
+  string subcadena = "";
 
-  cout << secuencias;
-  
-  while (i < X.length() + 1 && j < Y.length() + 1) {
+  int i = X.length(), j = Y.length();
+  int size = secuencias[X.length()][Y.length()];
+
+  while (size) {
     if (X[i - 1] == Y[j - 1]) {
-      subCadena += X[i - 1];
-      i++;
-      j++;
+      subcadena += X[i - 1];
+      i--;
+      j--;
       size--;
-    }else {
-      if (secuencias[i][j] < secuencias[i][j + 1]) j++;
-      else i++;
-    }
+    } else if (secuencias[i - 1][j] > secuencias[i][j - 1]) i--;
+    else j--;
   }
 
-  return subCadena;
+  reverse(subcadena.begin(), subcadena.end());
+
+  return subcadena;
 }
 
 bool resuelveCaso() {
@@ -96,10 +88,10 @@ bool resuelveCaso() {
 
   if (!std::cin) return false;
 
-  Matriz<int> secuencias(X.length() + 1, Y.length() + 1, 0);
-  buscarSubsecuencia(X, Y, X.length() - 1, Y.length() - 1, secuencias);
+  Matriz<int> secuencias(X.length() + 1, Y.length() + 1, -1);
+  buscarSubsecuencia(X, Y, X.length(), Y.length(), secuencias);
 
-  if (secuencias[X.length() - 1][Y.length() - 1] > 0)
+  if (secuencias[X.length()][Y.length()] > 0)
     std::cout << reconstruir(X, Y, secuencias);
 
   std::cout << "\n";
