@@ -50,26 +50,32 @@ bool resuelveCaso() {
   Matriz<int> palabras(str.length() + 1, str.length() + 1, -1);
 
   formarPalindromo(str, 1, str.length(), palabras);
-  cout << palabras << "\n";
-
-  cout << palabras[1][str.length()] << " ";
 
   int i = 1, j = str.length();
-  std::vector<char> sol(str.length() + palabras[1][str.length()]);
+  string word;
+  word.resize(str.length() + palabras[1][str.length()]);
+  int x = 0, z = str.length() + palabras[1][str.length()] - 1;
 
-  while (i < j) {
+  while (x < z) {
     if (str[i - 1] == str[j - 1]) {
-      cout << str[i - 1] << " ";
+      word[x] = str[i - 1]; word[z] = str[i - 1];
+      x++; z--;
       i++; j--;
-    } else if (palabras[i][j - 1] < palabras[i][j]) {
-      cout << str[j - 1] << " ";
-      j--;
-    }else {
-      cout << str[i + 1] << " ";
+    }else if (palabras[i + 1][j] < palabras[i][j - 1]) {
+      word[x] = str[i - 1]; word[z] = str[i - 1];
+      x++; z--;
       i++;
+    }else {
+      word[x] = str[j - 1]; word[z] = str[j - 1];
+      x++; z--;
+      j--;
     }
   }
 
+  if (str.length() % 2 != 0) word[x] = str[str.length() / 2 + 1];
+
+  cout << palabras[1][str.length()] << " " << word;
+  
   cout << "\n";
   
   return true;

@@ -22,23 +22,7 @@ using namespace std;
  
  @ </answer> */
 
-int findSum(priority_queue<int, std::vector<int>, greater<int>>& myQueue) {
-   int effort = 0;
-   int n = 0;
-
-   if (!myQueue.empty()) {
-      n = myQueue.top();
-      myQueue.pop();
-   }
-
-   while (!myQueue.empty()) {
-      effort += n + myQueue.top();
-      n += myQueue.top();
-      myQueue.pop();
-   }
-
-   return effort;
-}
+#define lli long long int
 
 bool resuelveCaso() {
    int n;
@@ -47,19 +31,25 @@ bool resuelveCaso() {
 
    if (n == 0) return false;
 
-   priority_queue<int, std::vector<int>, greater<int>> myQueue;
+   std::priority_queue<lli, std::vector<lli>, std::greater<lli>> sumandos;
 
+   int temp;
    for (int i = 0; i < n; i++) {
-      int t; std::cin >> t;
-      myQueue.push(t);
+      std::cin >> temp; sumandos.push(temp);
    }
 
-   std::cout << findSum(myQueue) << "\n";
+   lli suma = 0;
+   lli s1, s2;
+   while (sumandos.size() > 1) {
+      s1 = sumandos.top(); sumandos.pop();
+      s2 = sumandos.top(); sumandos.pop();
 
-   /* while(!myQueue.empty()) {
-      std::cout << myQueue.top() << "\n";
-      myQueue.pop();
-   } */
+      suma += (s1 + s2);
+
+      sumandos.push(s1 + s2);
+   }
+
+   std::cout << suma << "\n";
    
    return true;
 }
