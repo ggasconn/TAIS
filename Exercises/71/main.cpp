@@ -4,13 +4,14 @@
 #include <queue>
 #include <vector>
 
+#define lli long long int
 
 bool resolver_caso() {
     int n; std::cin >> n;
 
     if ( n == 0 ) return false;
 
-    std::priority_queue<int, std::vector<int>, std::greater<int>> seguidores;
+    std::priority_queue<lli, std::vector<lli>, std::greater<lli>> seguidores;
 
     int temp;
     for (int i = 0; i < n; i++) {
@@ -18,8 +19,8 @@ bool resolver_caso() {
         seguidores.push(temp);
     }
 
-    int t1, t2; // equipos
-    int gorras = 0;
+    lli t1, t2; // equipos
+    lli gorras = 0;
 
     while(!seguidores.empty() && seguidores.size() > 1) {
         t1 = seguidores.top(); seguidores.pop(); // menor que t2, gana este
