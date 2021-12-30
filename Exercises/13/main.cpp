@@ -11,7 +11,7 @@
 #include <queue>
 #include <vector>
 
-#include "Grafo.h"
+#include "GrafoMatriz.h"
 
 using namespace std;
 
@@ -23,6 +23,40 @@ using namespace std;
  del tamaño del problema.
  
  @ </answer> */
+
+class BlackStains {
+   private:
+      std::vector<int> visit;
+      int maxCon;
+      int nComp;
+
+   public:
+      BlackStains(Grafo const& g) : visit(g.V(), false), maxCon(0), nComp(0) {
+         for (int i = 0; i < g.V(); i++) {
+            if (!visit[i]) {
+               int tam = dfs(g, i);
+               maxCon = max(tam, maxCon);
+               nComp++;
+            }
+         }
+      }
+
+      int getMaxCon() const { return maxCon; }
+      int getNComp() const { return nComp; }
+   
+   private:
+      int dfs(Grafo const& g, int v) {
+         visit[v] = true;
+         int tam = 1;
+         
+         for (int w : g.ady(v)) {
+            if (!visit[w])
+               tam += dfs(g, w);
+         }
+
+         return tam;
+      }
+};
 
 bool resuelveCaso() {
    int n, m; std::cin >> n >> m;
@@ -39,6 +73,8 @@ bool resuelveCaso() {
             grafo.ponArista(i, j);
       }
    }
+
+   BlackStains stains(grafo);
 
    return true;
 }

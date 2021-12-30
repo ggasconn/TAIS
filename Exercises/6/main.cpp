@@ -56,17 +56,16 @@ bool resuelveCaso() {
    }
 
    int time = 0; bool isPlanned = true;
-   while (time < n && isPlanned) {
+   while (time < n && isPlanned && !planner.empty()) {
       task tempTask = planner.top();
       planner.pop();
 
-      if (tempTask.ini > time) {
+      if (tempTask.ini >= time) {
          time = tempTask.fin;
          
          if (tempTask.scheduleTime > 0) {
-            int interval = tempTask.fin - tempTask.ini;
             tempTask.ini += tempTask.scheduleTime;
-            tempTask.fin = tempTask.ini + interval;
+            tempTask.fin += tempTask.scheduleTime;
             planner.push(tempTask);
          }
 
