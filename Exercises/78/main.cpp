@@ -10,41 +10,33 @@ struct cliente {
 };
 
 bool operator<(cliente const& a, cliente const& b) {
-    //if (a.tiempo == b.tiempo) return a.idCaja < b.idCaja;
-    return a.tiempo < b.tiempo;
+    if (a.tiempo == b.tiempo) return b.idCaja < a.idCaja;
+    return b.tiempo < a.tiempo;
 }
 
 bool resolver_caso() {
-    int cajas, clientes; std::cin >> cajas >> clientes;
+    int N, C; std::cin >> N >> C;
 
-    if (cajas == 0 && clientes == 0) return false;
+    if (N == 0 && C == 0) return false;
 
-    std::priority_queue<cliente> fila;
-    cliente c;
-    cliente cAux;
+    std::priority_queue<cliente> cola;
+
     int cajasOcupadas = 0;
-    int caja = 1;
-    while(clientes) {
-        if (cajasOcupadas < cajas) {
-            std::cin >> c.tiempo;
-            c.idCaja = caja;
-            caja++;
-            fila.push(c);
-        }
-        if (cajasOcupadas == cajas) {
-            cAux = fila.top();
-            fila.pop();
-            std::cin >> c.tiempo;
-            c.tiempo += cAux.tiempo;
-            c.idCaja = cAux.idCaja;
-            caja = c.idCaja;
-            fila.push(c);
-        }
+    int tAux;
+    for (int i = 0; i < C; i++) {
+        std::cin >> tAux;
 
-        clientes--;
+        if (cajasOcupadas >= N) {
+            cliente c = cola.top(); cola.pop();
+            cola.push({ tAux + c.tiempo, c.idCaja });
+        }else {
+            cola.push({ tAux, cajasOcupadas });
+            cajasOcupadas++;
+        }
     }
 
-    std::cout << caja << "\n";
+    if (cajasOcupadas < N) std::cout << cajasOcupadas + 1 << "\n";
+    else std::cout << cola.top().idCaja + 1<< "\n";
 
     return true;
 }
