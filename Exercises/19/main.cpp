@@ -22,24 +22,6 @@ using namespace std;
 
 /*@ <answer>
 
-  La solución es un control de flujo de un programa, donde debemos comprobar
-  si hay ciclos y si termina la ejecución a pesar de haber ciclos.
-
-  El programa se representa mediante un grafo dirigido donde los vertices son las instrucciones
-  y las aristas apuntan a las instrucciones donde salta cada línea.
-
-  El programa hace una búsqueda en profundidad intentando llegar al nodo más profundo, empezando
-  en el vértice de origen, y durante esa búsqueda también va comprobando si hay algún ciclo.
-
-  En el caso de existir un ciclo y no haber llegado al último vértice, el programa tiene un bucle
-  infinito. Por el contrario, si existe un ciclo pero se llega al último vértice es que algunas
-  veces puede darse la situación de que el programa termine. Y si no existe ningún ciclo y además
-  el programa termina la ejecución, entonces siempre termina.
-
-  El coste siendo n, el número de vértices y m el número de aristas sería de O(n + m). Puesto que
-  se recorren todos los vértices 1 sola vez y se pasa por todas sus aristas en el recorrido de
-  adyancentes.
-
  @ </answer> */
 
 // ================================================================
@@ -47,75 +29,41 @@ using namespace std;
 // ================================================================
 //@ <answer>
 
-class ProgramaTermina {
+class Sumidero {
   private:
-    std::vector<int> visitado;
-    std::vector<int> apilado;
-    bool hayCiclo;
+    std::vector<int> visit;
+    std::vector<int> gradeIn;
+    int node;
 
   public:
-    ProgramaTermina(Digrafo const& g) : visitado(g.V()), apilado(g.V()), hayCiclo(false) {
-      dfs(g, 0);
+    Sumidero(Digrafo const& g) : visit(g.V(), 0), gradeIn(g.V(), 0), node(-1) {
+      for (int i = 0; i < g.V(); i++)
+        for (int w : g.ady(i))
+          gradeIn[w]++;
+      
+      for (int i = 0; i < g.V(); i++) {
+        if (g.ady(i).size() == 0 && gradeIn[i] == g.V() - 1) {
+          node = i; break;
+        }
+      }
     }
 
-    void imprimirSolucion() {
-      if (hayCiclo && visitado[visitado.size() - 1])
-        cout << "A VECES\n";
-      else if (hayCiclo && !visitado[visitado.size() - 1])
-        cout << "NUNCA\n";
-      else if (!hayCiclo && visitado[visitado.size() - 1])
-        cout << "SIEMPRE\n";
-    }
-  
-  private:
-    void dfs(Digrafo const& g, int v) {
-          apilado[v] = true;
-          visitado[v] = true;
-
-          for (int i : g.ady(v)) {
-              if (!visitado[i])
-                dfs(g, i);
-              else if (apilado[i])
-                hayCiclo = true;
-          }
-
-          apilado[v] = false;
+    int nodoSumidero() {
+      return node;
     }
 };
 
-
 bool resuelveCaso() {
-  // leemos la entrada
-  int L;
-  cin >> L;
-  if (!cin)
-    return false;
-  
-  // leer el resto del caso y resolverlo
-  Digrafo grafo(L + 1);
+  Digrafo grafo(std::cin);
 
-  for (int i = 0; i < L; i++) {
-    char I; std::cin >> I;
-    
-    switch(I) {
-      case 'A':
-          grafo.ponArista(i, i + 1);
-        break;
-      
-      case 'J':
-      case 'C':
-        int n; std::cin >> n;
-        grafo.ponArista(i, n - 1);
+  if (!std::cin) return false;
 
-        if (I == 'C')
-          grafo.ponArista(i, i + 1);
-        break;
-    }
-  }
+  Sumidero sumidero(grafo);
 
-  ProgramaTermina programaTermina(grafo);
+  int nodoSumidero = sumidero.nodoSumidero();
 
-  programaTermina.imprimirSolucion();
+  if (nodoSumidero == -1) std::cout << "NO\n";
+  else std::cout << "SI " << nodoSumidero << "\n";
 
   return true;
 }
