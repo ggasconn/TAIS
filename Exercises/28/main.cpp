@@ -33,26 +33,25 @@ class City {
     std::vector<int> distanceDijkstra;
     std::vector<int> distanceUsed;
     std::vector<int> visit;
-    std::vector<AristaDirigida<T>> last;
 
     IndexPQ<int> pq;
   
   public:
-    City(DigrafoValorado<int> const& g) : distance(g.V(), 0), visit(g.V(), false), distanceDijkstra(g.V(), INF), last(g.V()), pq(g.V()), distanceUsed(g.V(), 0) {
-      bfs(g);
-      dijkstra(g);
+    City(DigrafoValorado<int> const& g, int s) : distance(g.V(), 0), visit(g.V(), false), distanceDijkstra(g.V(), INF), pq(g.V()), distanceUsed(g.V(), 0) {
+      bfs(g, s);
+      dijkstra(g, s);
     }
 
-    bool hayCamino(int v) { return distanceDijkstra[v] != INF; }
+    bool hayCamino(int v) { return visit[v]; }
     int valorMinimo(int v) { return distanceDijkstra[v]; }
     bool caminosMinimizados(int v) { return distance[v] == distanceUsed[v]; }
 
   private:
-    void bfs(DigrafoValorado<int> const& g) {
+    void bfs(DigrafoValorado<int> const& g, int s) {
       std::queue<int> q;
-      distance[0] = 0;
-      visit[0] = true;
-      q.push(0);
+      distance[s] = 0;
+      visit[s] = true;
+      q.push(s);
 
       while (!q.empty()) {
         int v = q.front(); q.pop();
@@ -67,12 +66,13 @@ class City {
       }
     }
 
-    void dijkstra(DigrafoValorado<int> const& g) {
-      distanceDijkstra[0] = 0;
-      pq.push(0, 0);
+    void dijkstra(DigrafoValorado<int> const& g, int s) {
+      distanceDijkstra[s] = 0;
+      pq.push(s, 0);
+      
       while (!pq.empty()) {
         int v = pq.top().elem; pq.pop();
-        
+
         for (auto a : g.ady(v))
           relajar(a);
       }
@@ -84,8 +84,9 @@ class City {
       if (distanceDijkstra[w] > distanceDijkstra[v] + a.valor()) {
         distanceUsed[w] = distanceUsed[v] + 1;
         distanceDijkstra[w] = distanceDijkstra[v] + a.valor();
-        last[w] = a;
         pq.update(w, distanceDijkstra[w]);
+      }else if (distanceDijkstra[w] == distanceDijkstra[v] + a.valor() && distanceUsed[w] > distanceUsed[v] + 1) {
+          distanceUsed[w] = distanceUsed[v] + 1;
       }
     }
 };
@@ -103,16 +104,19 @@ bool resuelveCaso() {
     grafo.ponArista({ w - 1, v - 1, k });
   }
 
-  City<int> city(grafo);
 
   int k; std::cin >> k;
   for (int i = 0; i < k; i++) {
     int v, w; std::cin >> v >> w;
+    
+    City<int> city(grafo, v - 1);
 
-    if (city.hayCamino(w)) {
-      //cout << city.distanciaMinima(v)
-    } else cout << "IMPOSIBLE\n";
+    if (city.hayCamino(w - 1)) {
+      cout << city.valorMinimo(w - 1) << (city.caminosMinimizados(w - 1) ? " SI\n" : " NO\n");
+    } else cout << "SIN CAMINO\n";
   }
+
+  std::cout << "---\n";
 
   return true;
 }
