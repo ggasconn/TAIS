@@ -37,7 +37,7 @@ int bizcocho(int i, int j, std::vector<int> const& trozos, Matriz<int> &matriz) 
   if (matriz[i][j] != -1) return matriz[i][j];
 
   if (i + 1 == j) 
-    return 0; // Siempre es 0 porque nunca hay dos trozos juntos iguales
+    matriz[i][j] = 0; // Siempre es 0 porque nunca hay dos trozos juntos iguales
   else {
     if (trozos[i] == trozos[j] && trozos[i] != 0)
       matriz[i][j] = bizcocho(i + 1, j - 1, trozos, matriz) + 1;
