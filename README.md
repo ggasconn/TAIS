@@ -6,7 +6,7 @@
 * Problema 3 - Lo que cuesta sumar
 * Problema 4 - Unidad Curiosa de Monitorización
 * Problema 5 - Ordenando a los pacientes en urgencias
-* Problema 6 - <span style="color:red">Wrong Answer:</span> Multitarea
+* Problema 6 - ```Wrong Answer:``` Multitarea
 * Problema 7 - Coleccionando cómics
 * Problema 8 - ¿El mediano, por favor?
 * Problema 9 - Volando drones
@@ -14,7 +14,7 @@
 * Problema 12 - Los amigos de mis amigos
 * Problema 13 - Detección de manchas negras
 * Problema 14 - ¡Las noticias vuelan!
-* Problema 16 - <span style="color:red">Wrong Answer:</span> Menudo marrón
+* Problema 16 - ```Wrong Answer:``` Menudo marrón
 * Problema 18 - Ordenando tareas
 * Problema 19 - Sumidero en un grafo dirigido
 * Problema 21 - El Necronomicón de la informática
@@ -42,10 +42,10 @@
 * Problema 45 - Aibofobia
 * Problema 46 - Las vacas pensantes
 * Problema 48 - Subsecuencia común más larga
-* Problema 51 - <span style="color:red">Wrong Answer:</span> Mejor no llevar muchas monedas
+* Problema 51 - ```Wrong Answer:``` Mejor no llevar muchas monedas
 * Problema 70 - Pavimentar Barro City
 * Problema 71 - Las gorras de la competición
-* Problema 72 - <span style="color:red">Wrong Answer:</span> Bases en Marte
+* Problema 72 - ```Wrong Answer:``` Bases en Marte
 * Problema 73 - Nos vamos de concierto
 * Problema 76 - Oferta 3x2
 * Problema 77 - Repartiendo paquetes
